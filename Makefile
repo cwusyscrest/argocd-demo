@@ -2,7 +2,7 @@ production:
 	@argocd app create $@ \
     --dest-namespace argocd \
     --dest-server https://kubernetes.default.svc \
-    --repo https://github.com/caitlin615/argocd-demo.git \
+    --repo https://github.com/cwusyscrest/argocd-demo.git \
     --path apps \
     --helm-set environment=$@
 
@@ -10,7 +10,7 @@ pre-production:
 	@argocd app create $@ \
     --dest-namespace argocd \
     --dest-server https://kubernetes.default.svc \
-    --repo https://github.com/caitlin615/argocd-demo.git \
+    --repo https://github.com/cwusyscrest/argocd-demo.git \
     --path apps \
     --helm-set environment=$@
 
@@ -45,9 +45,9 @@ init: init-argocd
 deinit: delete deinit-argocd
 
 init-argocd:
-	@helm3 repo add argo https://argoproj.github.io/argo-helm
+	@helm repo add argo https://argoproj.github.io/argo-helm
 	@kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
-	@helm3 install argocd --namespace argocd argo/argo-cd -f argocd-init/values.yaml --wait
+	@helm install argocd --namespace argocd argo/argo-cd -f argocd-init/values.yaml --wait
 	@echo "Default argocd admin password, be sure to change it! '$$(kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2)'"
 
 deinit-argocd:
